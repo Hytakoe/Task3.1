@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ContainerAdapter;
@@ -36,6 +37,9 @@ public class MainForm extends JFrame {
             comboBox1.addItem(TrafficLightsTypes[i]);
         }
         TrafficLight currentTL = new TrafficLight();
+        currentTL.redLight = RedLight;
+        currentTL.yellowLight = YellowLight;
+        currentTL.greenLight = GreenLight;
         comboBox1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -103,9 +107,56 @@ public class MainForm extends JFrame {
                         currentTL.setType(TrafficLightTypes.PEDESTRIAN);
                         currentTL.setGreenTime(Integer.parseInt(GreenTime.getText()));
                         currentTL.setRedTime(Integer.parseInt(RedTime.getText()));
+                        try {
+                            currentTL.startPedestrian();
+                        } catch (InterruptedException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        break;
+                    case 1,2,3,4:
+                        currentTL.setType(TrafficLightTypes.CAR_ALL);
+                        currentTL.setGreenTime(Integer.parseInt(GreenTime.getText()));
+                        currentTL.setRedTime(Integer.parseInt(RedTime.getText()));
+                        try {
+                            currentTL.startAuto();
+                        } catch (InterruptedException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        break;
                 }
             }
         });
-        currentTL.
+        StartLeft.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int type = comboBox1.getSelectedIndex();
+                if (type == 2){
+                    currentTL.setType(TrafficLightTypes.CAR_LEFT);
+                } else {
+                    currentTL.setType(TrafficLightTypes.CAR_ALL);
+                }
+                try {
+                    currentTL.startLeft();
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        StartRight.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int type = comboBox1.getSelectedIndex();
+                if (type == 3){
+                    currentTL.setType(TrafficLightTypes.CAR_RIGHT);
+                } else {
+                    currentTL.setType(TrafficLightTypes.CAR_ALL);
+                }
+                try {
+                    currentTL.startRight();
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 }
